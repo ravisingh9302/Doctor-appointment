@@ -20,7 +20,7 @@ app.get('/favicon.ico', (req: Request, res: Response) => {
 })
 
 app.get('/', (req: Request, res: Response) => {
-    res.send(config.clientUrl)
+    res.send("H i server runingn at 5050")
 })
 
 app.use('/api/v1', router);
