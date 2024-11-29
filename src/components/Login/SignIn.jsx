@@ -25,6 +25,7 @@ const SignIn = ({ handleResponse }) => {
 
     const onSubmit = async (event) => {
         userLogin({ ...event })
+        console.log("running");
     }
 
     const onHandleForgotPassword = async (e) => {

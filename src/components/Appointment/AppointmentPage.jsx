@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "../Shared/Footer/Footer";
 import Header from "../Shared/Header/Header";
 import CheckoutPage from "../Booking/BookingCheckout/CheckoutPage";
@@ -11,6 +11,7 @@ import { useCreateAppointmentByUnauthenticateUserMutation } from "../../redux/ap
 import { useDispatch } from "react-redux";
 import { addInvoice } from "../../redux/feature/invoiceSlice";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 let initialValue = {
   paymentMethod: 'paypal',
@@ -39,6 +40,25 @@ const AppointmentPage = () => {
   const [IsDisable, setIsDisable] = useState(true);
   const [isConfirmDisable, setIsConfirmDisable] = useState(true);
   const [patientId, setPatientId] = useState('');
+  const [responseId, setResponseId] = React.useState("");
+
+  const loadScript = (src) => {
+      return new Promise((resolve) => {
+        const script = document.createElement("script");
+  
+        script.src = src;
+  
+        script.onload = () => {
+          resolve(true)
+        }
+        script.onerror = () => {
+          resolve(false)
+        }
+  
+        document.body.appendChild(script);
+      })
+    }
+
   const navigation = useNavigate();
 
   const [createAppointmentByUnauthenticateUser, {data: appointmentData, isError, isSuccess, isLoading, error}] = useCreateAppointmentByUnauthenticateUserMutation()
@@ -56,7 +76,31 @@ const AppointmentPage = () => {
     setIsConfirmDisable(isConfirmInputEmpty);
   }, [selectValue, isCheck]);
   
-  const handleConfirmSchedule = () => {
+  // const handleConfirmSchedule = () => {
+  //   const obj = {};
+  //   obj.patientInfo = {
+  //     firstName: selectValue.firstName,
+  //     lastName: selectValue.lastName,
+  //     email: selectValue.email,
+  //     phone: selectValue.phone,
+  //     patientId: role !== '' && role === 'patient' ? data.id : undefined,
+  //     scheduleDate: selectedDate,
+  //     scheduleTime: selectTime,
+  //   }
+  //   obj.payment = {
+  //     paymentType: selectValue.paymentType,
+  //     paymentMethod: selectValue.paymentMethod,
+  //     cardNumber: selectValue.cardNumber,
+  //     cardExpiredYear: selectValue.cardExpiredYear,
+  //     cvv: selectValue.cvv,
+  //     expiredMonth: selectValue.expiredMonth,
+  //     nameOnCard: selectValue.nameOnCard
+  //   }
+  //   createAppointmentByUnauthenticateUser(obj)
+  // }
+
+  const createRazorpayOrder = () => {
+
     const obj = {};
     obj.patientInfo = {
       firstName: selectValue.firstName,
@@ -76,7 +120,65 @@ const AppointmentPage = () => {
       expiredMonth: selectValue.expiredMonth,
       nameOnCard: selectValue.nameOnCard
     }
-    createAppointmentByUnauthenticateUser(obj)
+    
+
+    let dataa = JSON.stringify({
+      amount: 1 * 100, // Convert to paise
+      currency: "INR",
+    });
+
+    let config = {
+      method: "post",
+      maxBodyLength: Infinity,
+      url: "http://localhost:5050/orders",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      data: dataa
+    }
+
+    axios.request(config)
+    .then((response) => {
+      console.log('test',JSON.stringify(response.data))
+      response &&  createAppointmentByUnauthenticateUser(obj)
+      handleRazorpayScreen(response.data.amount)
+    })
+    .catch((error) => {
+      console.log("error at", error)
+    })
+  }
+
+  const handleRazorpayScreen = async(amount) => {
+    const res = await loadScript("https:/checkout.razorpay.com/v1/checkout.js")
+    console.log('res',res)
+
+    if (!res) {
+      alert("Some error at razorpay screen loading")
+      return;
+    }
+
+    const options = {
+      key: 'rzp_test_zi4jtbenzThe4v',
+      amount: amount,
+      currency: 'INR',
+      name: "papaya coders",
+      description: "payment to papaya coders",
+      image: "https://papayacoders.com/demo.png",
+      handler: function (response){
+        setResponseId(response.razorpay_payment_id)
+      },
+      prefill: {
+        name: "papaya coders",
+        email: "papayacoders@gmail.com"
+      },
+      theme: {
+        color: "#F4C430"
+      }
+    }
+
+    const paymentObject = new window.Razorpay(options)
+    console.log('paymentObject',paymentObject)
+    paymentObject.open()
   }
 
   useEffect(() => {
@@ -139,7 +241,9 @@ const AppointmentPage = () => {
                 disabled={current === 0 ? (selectTime ? false : true) : IsDisable || !selectTime}
                 onClick={() => next()}>Next</Button>)}
 
-            {current === steps.length - 1 && (<Button type="primary" size="large" disabled={isConfirmDisable} loading={isLoading} onClick={handleConfirmSchedule}>Confirm</Button>)}
+            {/* {current === steps.length - 1 && (<Button type="primary" size="large" disabled={isConfirmDisable} loading={isLoading} onClick={handleConfirmSchedule}>Confirm</Button>)} */}
+            {current === steps.length - 1 && (<Button type="primary" size="large"  loading={isLoading} onClick={createRazorpayOrder}>Confirm</Button>)}
+
             {current > 0 && (<Button style={{ margin: '0 8px', }} size="large" onClick={() => prev()} >Previous</Button>)}
           </div>
         </div>

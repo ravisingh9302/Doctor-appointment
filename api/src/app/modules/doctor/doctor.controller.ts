@@ -20,6 +20,7 @@ const getAllDoctors = catchAsync(async (req: Request, res: Response) => {
     const filter = pick(req.query, IDoctorFiltersData);
     const options = pick(req.query, IDoctorOptions);
     const result = await DoctorService.getAllDoctors(filter, options);
+    console.log("all doctore");
     sendResponse(res, {
         statusCode: 200,
         message: 'Successfully Retrieve doctors !!',

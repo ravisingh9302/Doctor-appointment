@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 import { addInvoice } from '../../../redux/feature/invoiceSlice';
 import Header from '../../Shared/Header/Header';
 import useAuthCheck from '../../../redux/hooks/useAuthCheck';
+import axios from 'axios';
 
 const DoctorBooking = () => {
     const dispatch = useDispatch();
@@ -51,6 +52,7 @@ const DoctorBooking = () => {
     const [selectValue, setSelectValue] = useState(initialValue);
     const [IsdDisable, setIsDisable] = useState(true);
     const [IsConfirmDisable, setIsConfirmDisable] = useState(true);
+
 
     const handleChange = (e) => { setSelectValue({ ...selectValue, [e.target.name]: e.target.value }) }
 
@@ -140,6 +142,7 @@ const DoctorBooking = () => {
         key: item.title,
         title: item.title,
     }))
+    
 
     const handleConfirmSchedule = () => {
         const obj = {};

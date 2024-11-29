@@ -52,7 +52,7 @@ const Header = () => {
             <Button variant="outline-danger" className='w-100' size="sm" onClick={hanldeSignOut}>
                 Logged Out
             </Button>
-        </div >
+        </div>
     );
     return (
         <>

@@ -43,6 +43,7 @@ import Dashboard from './components/Doctor/Dashboard/Dashboard';
 import PrivateOutlet from './components/Shared/PrivateOutlet';
 import NotFound from './components/UI/NotFound';
 
+
 function App() {
   return (
     <Router>

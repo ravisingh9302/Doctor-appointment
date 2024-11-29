@@ -27,7 +27,7 @@ const BookingSuccess = () => {
     return (
         <>
             <Header />
-            <div className="container mx-auto d-flex justify-content-center align-items-center text-center">
+            {/* <div className="container mx-auto d-flex justify-content-center align-items-center text-center">
                 {
                     data?.id ?
 
@@ -82,7 +82,7 @@ const BookingSuccess = () => {
                             <h6 className='p-2 my-3'>You will be redirect to homepage !</h6>
                         </div>
                 }
-            </div>
+            </div> */}
             <Footer />
         </>
 

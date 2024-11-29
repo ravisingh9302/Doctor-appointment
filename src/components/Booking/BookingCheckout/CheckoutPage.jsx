@@ -16,7 +16,7 @@ const CheckoutPage = ({ handleChange, selectValue, isCheck, setIsChecked, data, 
     return (
         <div className="container mt-5">
             <div className="row">
-                <div className="col-md-7" >
+                {/* <div className="col-md-7" >
                     <div className="rounded p-3" style={{ background: "#f8f9fa" }}>
 
                         <div className='row'>
@@ -109,7 +109,7 @@ const CheckoutPage = ({ handleChange, selectValue, isCheck, setIsChecked, data, 
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> */}
 
                 <div className="col-md-5 col-sm-12">
                     <div className="rounded p-3" style={{ background: "#f8f9fa" }}>
