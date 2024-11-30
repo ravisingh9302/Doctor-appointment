@@ -242,12 +242,13 @@ const DoctorBooking = () => {
         }
 
         const options = {
-            "key": 'rzp_test_EIam37Rh1mXlLm',
+            "key": process.env.REACT_APP_API_KEY_RAZORPAY,
             "amount": orderdata.amount,
             "currency": 'INR',
             "name": "24x7 Doctor",
             "description": "Payment for the appointment Booking",
-            "image": "https://papayacoders.com/demo.png",
+            // "image": "https://papayacoders.com/demo.png",
+            "image": "https://images.pexels.com/photos/12660379/pexels-photo-12660379.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
             "order_id": orderdata.order_id,
             handler: function (response) {
                 console.log('razorpay response', response)
@@ -259,7 +260,7 @@ const DoctorBooking = () => {
                 email: "singhravi99933@gmail.com"
             },
             theme: {
-                color: "#F4C430"
+                color: "#305af4"
             }
         }
 

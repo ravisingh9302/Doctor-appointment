@@ -135,7 +135,7 @@ const AppointmentPage = () => {
     }
 
     const options = {
-      "key": 'rzp_test_EIam37Rh1mXlLm',
+      "key": process.env.REACT_APP_API_KEY_RAZORPAY,
       "amount": orderdata.amount,
       "currency": 'INR',
       "name": "24x7 Doctor",

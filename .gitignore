@@ -13,6 +13,8 @@ api/logs/winston
 /build
 
 # misc
+.env.production
+.env.development
 .DS_Store
 .env.local
 .env.test.local
