@@ -12,14 +12,17 @@ const CheckoutPage = ({ handleChange, selectValue, isCheck, setIsChecked, data, 
     let price = data?.price ? data.price : 60;
     let doctorImg = data?.img ? data?.img : img
 
-    const vat = (15 / 100) * (Number(price))
+    const vat = (12 / 100) * (Number(price))
+
+
+
     return (
         <div className="container mt-5">
             <div className="row">
-                {/* <div className="col-md-7" >
+                 <div className="col-md-7" >
                     <div className="rounded p-3" style={{ background: "#f8f9fa" }}>
 
-                        <div className='row'>
+                        {/* <div className='row'>
                             <div className="col-md-6 mb-2">
                                 <label className="payment-radio credit-card-option">
                                     <input type="radio"
@@ -74,9 +77,9 @@ const CheckoutPage = ({ handleChange, selectValue, isCheck, setIsChecked, data, 
                                     <input className="form-control" id="cvv" type="number" value={cvv && cvv} onChange={(e) => handleChange(e)} name='cvv' />
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
-                        <div className="d-flex gap-2 mt-3 mb-3">
+                        {/* <div className="d-flex gap-2 mt-3 mb-3">
                             <div>
                                 <input type="radio"
                                     name="paymentMethod"
@@ -97,7 +100,8 @@ const CheckoutPage = ({ handleChange, selectValue, isCheck, setIsChecked, data, 
                                 <span className="checkmark ms-3"></span>
                                 Payoneer
                             </div>
-                        </div>
+                        </div> */}
+
                         <div className="terms-accept">
                             <div className="custom-checkbox">
                                 <input
@@ -109,7 +113,9 @@ const CheckoutPage = ({ handleChange, selectValue, isCheck, setIsChecked, data, 
                             </div>
                         </div>
                     </div>
-                </div> */}
+                </div> 
+
+
 
                 <div className="col-md-5 col-sm-12">
                     <div className="rounded p-3" style={{ background: "#f8f9fa" }}>
@@ -132,15 +138,15 @@ const CheckoutPage = ({ handleChange, selectValue, isCheck, setIsChecked, data, 
                                 <li>Time <span>{selectTime}</span></li>
                             </ul>
                             <ul className="booking-fee">
-                                <li>Consulting Fee <span>${price}</span></li>
-                                <li>Booking Fee <span>$10</span></li>
-                                <li>Vat (Including 15%) <span>$ {vat}</span></li>
+                                <li>Consulting Fee <span>₹{price}</span></li>
+                                <li>Booking Fee <span>₹10</span></li>
+                                <li>GST(Including 18%) <span>₹{vat}</span></li>
                             </ul>
 
                             <ul className="booking-total">
                                 <li className='d-flex justify-content-between'>
                                     <span className='fw-bold'>Total</span>
-                                    <span className="total-cost" style={{ color: '#1977cc' }}>${(Number(price) + 10 + vat)}</span>
+                                    <span className="total-cost" style={{ color: '#1977cc' }}>₹{(Number(price) + 10 + vat)}</span>
                                 </li>
                             </ul>
                         </div>

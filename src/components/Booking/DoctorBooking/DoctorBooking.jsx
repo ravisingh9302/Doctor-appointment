@@ -19,6 +19,9 @@ import useAuthCheck from '../../../redux/hooks/useAuthCheck';
 import axios from 'axios';
 
 const DoctorBooking = () => {
+
+
+
     const dispatch = useDispatch();
     let initialValue = {
         paymentMethod: 'paypal',
@@ -36,7 +39,7 @@ const DoctorBooking = () => {
         cardExpiredYear: '',
         cvv: '',
     }
-    const {data:loggedInUser, role} = useAuthCheck();
+    const { data: loggedInUser, role } = useAuthCheck();
     const [current, setCurrent] = useState(0);
     const [selectedDate, setSelectedDate] = useState('');
     const [selectDay, setSelecDay] = useState('');
@@ -57,15 +60,16 @@ const DoctorBooking = () => {
     const handleChange = (e) => { setSelectValue({ ...selectValue, [e.target.name]: e.target.value }) }
 
     useEffect(() => {
-        const { firstName, lastName, email, phone, nameOnCard, cardNumber, expiredMonth, cardExpiredYear, cvv, reasonForVisit } = selectValue;
+        const { firstName, lastName, email, phone, reasonForVisit } = selectValue;
         const isInputEmpty = !firstName || !lastName || !email || !phone || !reasonForVisit;
-        const isConfirmInputEmpty = !nameOnCard || !cardNumber || !expiredMonth || !cardExpiredYear || !cvv || !isCheck;
+        const isConfirmInputEmpty =  !isCheck;
         setIsDisable(isInputEmpty);
         setIsConfirmDisable(isConfirmInputEmpty);
     }, [selectValue, isCheck])
 
 
     const handleDateChange = (_date, dateString) => {
+        console.log("ffsaf",_date,"fafasf",dateString)
         setSelectedDate(dateString)
         setSelecDay(moment(dateString).format('dddd').toLowerCase());
         refetch();
@@ -122,7 +126,7 @@ const DoctorBooking = () => {
         },
         {
             title: 'Patient Information',
-            content: <PersonalInformation handleChange={handleChange} selectValue={selectValue} setPatientId={setPatientId}/>
+            content: <PersonalInformation handleChange={handleChange} selectValue={selectValue} setPatientId={setPatientId} />
         },
         {
             title: 'Payment',
@@ -142,7 +146,7 @@ const DoctorBooking = () => {
         key: item.title,
         title: item.title,
     }))
-    
+
 
     const handleConfirmSchedule = () => {
         const obj = {};
@@ -179,6 +183,144 @@ const DoctorBooking = () => {
             message.error(error?.data?.message);
         }
     }, [createIsSuccess, createError])
+
+
+    const loadScript = (src) => {
+        return new Promise((resolve) => {
+            const script = document.createElement("script");
+
+            script.src = src;
+
+            script.onload = () => {
+                resolve(true)
+            }
+            script.onerror = () => {
+                resolve(false)
+            }
+
+            document.body.appendChild(script);
+        })
+    }
+
+
+    const createRazorpayOrder = (ab) => {
+        console.log("ab log ", ab)
+
+        let dataa = JSON.stringify({
+            amount: parseFloat(ab.price) * 100, // Convert to paise
+            currency: "INR",
+        });
+
+        let config = {
+            method: "post",
+            maxBodyLength: Infinity,
+            url: "http://localhost:5050/createpayment",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: dataa
+        }
+
+        axios.request(config)
+            .then((response) => {
+                console.log('test', JSON.stringify(response.data))
+                handleRazorpayScreen(response.data)
+            })
+            .catch((error) => {
+                console.log("error at", error)
+            })
+    }
+
+
+    const handleRazorpayScreen = async (orderdata) => {
+        console.log("orderdata", orderdata)
+        const res = await loadScript("https:/checkout.razorpay.com/v1/checkout.js")
+
+        if (!res) {
+            alert("Some error at razorpay screen loading")
+            return;
+        }
+
+        const options = {
+            "key": 'rzp_test_EIam37Rh1mXlLm',
+            "amount": orderdata.amount,
+            "currency": 'INR',
+            "name": "24x7 Doctor",
+            "description": "Payment for the appointment Booking",
+            "image": "https://papayacoders.com/demo.png",
+            "order_id": orderdata.order_id,
+            handler: function (response) {
+                console.log('razorpay response', response)
+                // setResponseId(response.razorpay_payment_id)
+                verifypayment(response)
+            },
+            prefill: {
+                name: "24x7 Doctor",
+                email: "singhravi99933@gmail.com"
+            },
+            theme: {
+                color: "#F4C430"
+            }
+        }
+
+        const paymentObject = new window.Razorpay(options)
+        console.log('paymentObject', paymentObject)
+        paymentObject.open()
+        paymentObject.on('payment.failed', function (response) {
+            console.log("payment.response", response)
+        })
+    }
+
+
+
+    const verifypayment = async (paymentdata) => {
+        console.log("verifydata", paymentdata)
+        let abcd = {
+            method: "get",
+            maxBodyLength: Infinity,
+            url: `http://localhost:5050/payment/${paymentdata.razorpay_payment_id}`,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+        }
+
+       
+        axios.request(abcd)
+            .then((response) => {
+                console.log('payment varification ', response.data)
+                const obj = {};
+                obj.patientInfo = {
+                    firstName: selectValue.firstName,
+                    lastName: selectValue.lastName,
+                    email: selectValue.email,
+                    phone: selectValue.phone,
+                    scheduleDate: selectedDate,
+                    scheduleTime: selectTime,
+                    doctorId: doctorId,
+                    patientId: role !== '' && role === 'patient' ? patientId : undefined,
+                }
+                obj.payment = {
+                    paymentType: selectValue.paymentType,
+                    paymentMethod: selectValue.paymentMethod,
+                    cardNumber: selectValue.cardNumber,
+                    cardExpiredYear: selectValue.cardExpiredYear,
+                    cvv: selectValue.cvv,
+                    expiredMonth: selectValue.expiredMonth,
+                    nameOnCard: selectValue.nameOnCard
+                }
+
+                console.log("final object", obj)
+                createAppointment(obj);
+                // response && createAppointmentByUnauthenticateUser(obj)
+            })
+            .catch((error) => {
+                console.log("error at", error)
+            })
+
+    }
+
+
+
     return (
         <>
             <Header />
@@ -190,7 +332,8 @@ const DoctorBooking = () => {
                         disabled={current === 0 ? (selectTime ? false : true) : IsdDisable || !selectTime}
                         onClick={() => next()}>Next</Button>)}
 
-                    {current === steps.length - 1 && (<Button type="primary" disabled={IsConfirmDisable} loading={createIsLoading} onClick={handleConfirmSchedule}>Confirm</Button>)}
+                    {/* {current === steps.length - 1 && (<Button type="primary" disabled={IsConfirmDisable} loading={createIsLoading} onClick={handleConfirmSchedule}>Confirm</Button>)} */}
+                    {current === steps.length - 1 && (<Button type="primary" disabled={IsConfirmDisable} loading={createIsLoading} onClick={() => createRazorpayOrder(data)}>Confirm</Button>)}
                     {current > 0 && (<Button style={{ margin: '0 8px', }} onClick={() => prev()} >Previous</Button>)}
                 </div>
             </div>

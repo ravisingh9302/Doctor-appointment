@@ -47,7 +47,7 @@ const Header = () => {
             <div className='my-2'>
                 <h5 className='text-capitalize'>{data?.firstName + ' ' + data?.lastName}</h5>
                 <p className='my-0'>{data?.email}</p>
-                <Link to="/dashboard">Deshboard</Link>
+                <Link to="/dashboard">Dashboard</Link>
             </div>
             <Button variant="outline-danger" className='w-100' size="sm" onClick={hanldeSignOut}>
                 Logged Out
@@ -67,7 +67,7 @@ const Header = () => {
                     </Link>
                     <HeaderNav isLoggedIn={isLoggedIn} data={data}
                         avatar={avatar} content={content} open={open} setOpen={setOpen} />
-                    <Link to={'/appointment'} className="appointment-btn scrollto"><span className="d-none d-md-inline">Make an</span> Appointment</Link>
+                    <Link to={'/doctors'} className="appointment-btn scrollto"><span className="d-none d-md-inline">Make an</span> Appointment</Link>
                 </div>
             </header>
         </>

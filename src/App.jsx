@@ -73,7 +73,8 @@ function App() {
         <Route path='/about' element={<About />} />
         <Route path='/service' element={<Service />} />
         <Route path='/reset-password/:userId/:uniqueString' element={<ForgotPassword />} />
-        <Route path='/appointment' element={<AppointmentPage />} />
+        {/* <Route path='/appointment' element={<AppointmentPage />} /> */}
+        {/* <Route path='/appointment' element={<SearchDoctor/>} /> */}
         <Route path='/track-appointment' element={<TrackAppointment />} />
         <Route path='/doctors' element={<SearchDoctor />} />
         <Route path='/doctors/profile/:id' element={<DoctorProfile />} />

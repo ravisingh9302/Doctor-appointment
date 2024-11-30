@@ -1,5 +1,6 @@
 import dotenv from 'dotenv';
 import path from 'path';
+import Razorpay from 'razorpay';
 
 dotenv.config({path: path.join(process.cwd(), '.env')});
 
@@ -19,6 +20,11 @@ export default {
         name: process.env.CLOUND_NAME,
         key: process.env.API_KEY,
         secret: process.env.API_SECRET
+    },
+
+    Razorpay:{
+        api_key:process.env.RAZOR_API_KEY,
+        secret_key:process.env.RAZOR_SECRET_KEY,
     },
     emailPass: process.env.EMAIL_PASS,
     adminEmail: process.env.ADMIN_EMAIL,

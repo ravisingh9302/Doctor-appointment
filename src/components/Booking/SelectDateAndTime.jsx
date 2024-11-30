@@ -2,6 +2,7 @@ import moment from 'moment'
 import { DatePicker } from 'antd';
 
 const SelectDateAndTime = ({ content, handleDateChange, disabledDateTime, selectedDate, dContent, selectTime }) => {
+
     return (
         <div style={{ marginTop: '5rem'}}>
             <div>

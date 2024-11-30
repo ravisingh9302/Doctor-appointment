@@ -31,7 +31,7 @@ let initialValue = {
 }
 const AppointmentPage = () => {
   const dispatch = useDispatch();
-  const {data, role} = useAuthCheck();
+  const { data, role } = useAuthCheck();
   const [current, setCurrent] = useState(0);
   const [selectedDate, setSelectedDate] = useState('');
   const [selectTime, setSelectTime] = useState('');
@@ -43,25 +43,25 @@ const AppointmentPage = () => {
   const [responseId, setResponseId] = React.useState("");
 
   const loadScript = (src) => {
-      return new Promise((resolve) => {
-        const script = document.createElement("script");
-  
-        script.src = src;
-  
-        script.onload = () => {
-          resolve(true)
-        }
-        script.onerror = () => {
-          resolve(false)
-        }
-  
-        document.body.appendChild(script);
-      })
-    }
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+
+      script.src = src;
+
+      script.onload = () => {
+        resolve(true)
+      }
+      script.onerror = () => {
+        resolve(false)
+      }
+
+      document.body.appendChild(script);
+    })
+  }
 
   const navigation = useNavigate();
 
-  const [createAppointmentByUnauthenticateUser, {data: appointmentData, isError, isSuccess, isLoading, error}] = useCreateAppointmentByUnauthenticateUserMutation()
+  const [createAppointmentByUnauthenticateUser, { data: appointmentData, isError, isSuccess, isLoading, error }] = useCreateAppointmentByUnauthenticateUserMutation()
 
   const handleChange = (e) => { setSelectValue({ ...selectValue, [e.target.name]: e.target.value }) };
 
@@ -75,62 +75,40 @@ const AppointmentPage = () => {
     setIsDisable(isInputEmpty);
     setIsConfirmDisable(isConfirmInputEmpty);
   }, [selectValue, isCheck]);
-  
+
   // const handleConfirmSchedule = () => {
-  //   const obj = {};
-  //   obj.patientInfo = {
-  //     firstName: selectValue.firstName,
-  //     lastName: selectValue.lastName,
-  //     email: selectValue.email,
-  //     phone: selectValue.phone,
-  //     patientId: role !== '' && role === 'patient' ? data.id : undefined,
-  //     scheduleDate: selectedDate,
-  //     scheduleTime: selectTime,
-  //   }
-  //   obj.payment = {
-  //     paymentType: selectValue.paymentType,
-  //     paymentMethod: selectValue.paymentMethod,
-  //     cardNumber: selectValue.cardNumber,
-  //     cardExpiredYear: selectValue.cardExpiredYear,
-  //     cvv: selectValue.cvv,
-  //     expiredMonth: selectValue.expiredMonth,
-  //     nameOnCard: selectValue.nameOnCard
-  //   }
+  const obj = {};
+  obj.patientInfo = {
+    firstName: selectValue.firstName,
+    lastName: selectValue.lastName,
+    email: selectValue.email,
+    phone: selectValue.phone,
+    patientId: role !== '' && role === 'patient' ? data?.id:undefined,
+    scheduleDate: selectedDate,
+    scheduleTime: selectTime,
+  }
+  obj.payment = {
+    paymentType: selectValue.paymentType,
+    paymentMethod: selectValue.paymentMethod,
+    cardNumber: selectValue.cardNumber,
+    cardExpiredYear: selectValue.cardExpiredYear,
+    cvv: selectValue.cvv,
+    expiredMonth: selectValue.expiredMonth,
+    nameOnCard: selectValue.nameOnCard
+  }
   //   createAppointmentByUnauthenticateUser(obj)
   // }
 
   const createRazorpayOrder = () => {
-
-    const obj = {};
-    obj.patientInfo = {
-      firstName: selectValue.firstName,
-      lastName: selectValue.lastName,
-      email: selectValue.email,
-      phone: selectValue.phone,
-      patientId: role !== '' && role === 'patient' ? data.id : undefined,
-      scheduleDate: selectedDate,
-      scheduleTime: selectTime,
-    }
-    obj.payment = {
-      paymentType: selectValue.paymentType,
-      paymentMethod: selectValue.paymentMethod,
-      cardNumber: selectValue.cardNumber,
-      cardExpiredYear: selectValue.cardExpiredYear,
-      cvv: selectValue.cvv,
-      expiredMonth: selectValue.expiredMonth,
-      nameOnCard: selectValue.nameOnCard
-    }
-    
-
-    let dataa = JSON.stringify({
-      amount: 1 * 100, // Convert to paise
+   let dataa = JSON.stringify({
+      amount: 10 * 100, // Convert to paise
       currency: "INR",
     });
 
     let config = {
       method: "post",
       maxBodyLength: Infinity,
-      url: "http://localhost:5050/orders",
+      url: "http://localhost:5050/createpayment",
       headers: {
         'Content-Type': 'application/json'
       },
@@ -138,19 +116,18 @@ const AppointmentPage = () => {
     }
 
     axios.request(config)
-    .then((response) => {
-      console.log('test',JSON.stringify(response.data))
-      response &&  createAppointmentByUnauthenticateUser(obj)
-      handleRazorpayScreen(response.data.amount)
-    })
-    .catch((error) => {
-      console.log("error at", error)
-    })
+      .then((response) => {
+        console.log('test', JSON.stringify(response.data))
+        handleRazorpayScreen(response.data)
+      })
+      .catch((error) => {
+        console.log("error at", error)
+      })
   }
 
-  const handleRazorpayScreen = async(amount) => {
+  const handleRazorpayScreen = async (orderdata) => {
+    console.log("orderdata", orderdata)
     const res = await loadScript("https:/checkout.razorpay.com/v1/checkout.js")
-    console.log('res',res)
 
     if (!res) {
       alert("Some error at razorpay screen loading")
@@ -158,18 +135,21 @@ const AppointmentPage = () => {
     }
 
     const options = {
-      key: 'rzp_test_zi4jtbenzThe4v',
-      amount: amount,
-      currency: 'INR',
-      name: "papaya coders",
-      description: "payment to papaya coders",
-      image: "https://papayacoders.com/demo.png",
-      handler: function (response){
+      "key": 'rzp_test_EIam37Rh1mXlLm',
+      "amount": orderdata.amount,
+      "currency": 'INR',
+      "name": "24x7 Doctor",
+      "description": "Payment for the appointment Booking",
+      "image": "https://papayacoders.com/demo.png",
+      "order_id": orderdata.order_id,
+      handler: function (response) {
+        console.log('razorpay response', response)
         setResponseId(response.razorpay_payment_id)
+        verifypayment(response)
       },
       prefill: {
-        name: "papaya coders",
-        email: "papayacoders@gmail.com"
+        name: "24x7 Doctor",
+        email: "singhravi99933@gmail.com"
       },
       theme: {
         color: "#F4C430"
@@ -177,21 +157,48 @@ const AppointmentPage = () => {
     }
 
     const paymentObject = new window.Razorpay(options)
-    console.log('paymentObject',paymentObject)
+    console.log('paymentObject', paymentObject)
     paymentObject.open()
+    paymentObject.on('payment.failed', function (response) {
+      console.log("payment.response", response)
+    })
+  }
+
+
+  const verifypayment = async (paymentdata) => {
+    console.log("verifydata", paymentdata)
+    let abcd = {
+      method: "get",
+      maxBodyLength: Infinity,
+      url: `http://localhost:5050/payment/${paymentdata.razorpay_payment_id}`,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }
+
+    axios.request(abcd)
+      .then((response) => {
+        console.log('payment varification ', JSON.stringify(response.data))
+        response && createAppointmentByUnauthenticateUser(obj)
+      })
+      .catch((error) => {
+        console.log("error at", error)
+      })
+
   }
 
   useEffect(() => {
     if (isSuccess) {
-        message.success("Succcessfully Appointment Scheduled")
-        setSelectValue(initialValue);
-        dispatch(addInvoice({ ...appointmentData }))
-        navigation(`/booking/success/${appointmentData?.id}`)
+      message.success("Succcessfully Appointment Scheduled")
+      setSelectValue(initialValue);
+      console.log("appoint data", appointmentData)
+      dispatch(addInvoice({ ...appointmentData }))
+      navigation(`/booking/success/${appointmentData?.id}`)
     }
     if (isError) {
-        message.error(error?.data?.message);
+      message.error(error?.data?.message);
     }
-}, [isSuccess, isError, isLoading, appointmentData])
+  }, [isSuccess, isError, isLoading, appointmentData])
 
   const handleDateChange = (date) => { setSelectedDate(moment(date).format('YYYY-MM-DD HH:mm:ss')) }
 
@@ -207,7 +214,7 @@ const AppointmentPage = () => {
     },
     {
       title: 'Patient Information',
-      content: <PersonalInformation handleChange={handleChange} selectValue={selectValue} setPatientId={setPatientId}/>
+      content: <PersonalInformation handleChange={handleChange} selectValue={selectValue} setPatientId={setPatientId} />
     },
     {
       title: 'Payment',
@@ -242,7 +249,7 @@ const AppointmentPage = () => {
                 onClick={() => next()}>Next</Button>)}
 
             {/* {current === steps.length - 1 && (<Button type="primary" size="large" disabled={isConfirmDisable} loading={isLoading} onClick={handleConfirmSchedule}>Confirm</Button>)} */}
-            {current === steps.length - 1 && (<Button type="primary" size="large"  loading={isLoading} onClick={createRazorpayOrder}>Confirm</Button>)}
+            {current === steps.length - 1 && (<Button type="primary" size="large" loading={isLoading} onClick={createRazorpayOrder}>Confirm</Button>)}
 
             {current > 0 && (<Button style={{ margin: '0 8px', }} size="large" onClick={() => prev()} >Previous</Button>)}
           </div>

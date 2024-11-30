@@ -19,10 +19,11 @@ app.get('/favicon.ico', (req: Request, res: Response) => {
     res.status(204).end();
 })
 
-app.post('/orders' ,async(req: Request, res: Response) => {
+app.post('/createpayment', async (req: Request, res: Response) => {
+
     const razorpay = new Razorpay({
-        key_id : "rzp_test_zi4jtbenzThe4v",
-        key_secret : "67N5JnK3aiITUiQVHNR6JLOy"
+        key_id: config.Razorpay.api_key,
+        key_secret: config.Razorpay.secret_key
     })
 
     const options = {
@@ -44,28 +45,30 @@ app.post('/orders' ,async(req: Request, res: Response) => {
     }
 })
 
-app.get("/payment/:paymentId", async(req, res) => {
-    const {paymentId} = req.params;
+app.get("/payment/:paymentId", async (req, res) => {
+    const { paymentId } = req.params;
 
     const razorpay = new Razorpay({
-        key_id: "rzp_test_zi4jtbenzThe4v",
-        key_secret:"67N5JnK3aiITUiQVHNR6JLOy"
+        key_id: config.Razorpay.api_key,
+        key_secret: config.Razorpay.secret_key
     })
-    
+
     try {
         const payment = await razorpay.payments.fetch(paymentId)
 
-        if (!payment){
+        if (!payment) {
             return res.status(500).json("Error at razorpay loading")
         }
-
+        console.log("verify payment", payment)
         res.json({
-            status: payment.status,
-            method: payment.method,
-            amount: payment.amount,
-            currency: payment.currency
+            status: payment?.status,
+            method: payment?.method,
+            amount: payment?.amount,
+            currency: payment?.currency,
+            orderid: payment?.order_id,
+            payment: payment?.id
         })
-    } catch(error) {
+    } catch (error) {
         res.status(500).json("failed to fetch")
     }
 })
