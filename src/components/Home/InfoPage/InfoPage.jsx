@@ -12,10 +12,9 @@ const InfoPage = () => {
                     <div className="col-lg-4 d-flex align-items-stretch">
                         <div className="content">
                             <h3>Why Choose Us?</h3>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Duis aute irure dolor in reprehenderit
-                                Asperiores dolores sed et. Tenetur quia eos. Autem tempore quibusdam vel necessitatibus optio ad corporis.
-                            </p>
+                            { <p>
+                                We provide a centralized system for managing patient records, medical history, and appointment details. Stay organized with easy access to important patient data, making consultations more efficient.
+                            </p>}
                             <div className="text-center">
                                 <Link href="/" className="more-btn">Learn More <i className="bx bx-chevron-right"></i></Link>
                             </div>
@@ -37,7 +36,7 @@ const InfoPage = () => {
                                         <FaHeadset className="icon"/>
                                         <h4>Emegency Cases</h4>
                                         <h6 className='text-secondary'>+88 01751 040425</h6>
-                                        <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Qui facilis perferendis quia maxime. Laborum excepturi pariatur laboriosam nihil, dolor molestias.</p>
+                                        <p>In emergencies, every second counts. Our platform allows patients to book appointments instantly, ensuring that doctors are alerted immediately when an emergency case is pending. Streamlined scheduling helps doctors prioritize critical situations without delays.</p>
                                     </div>
                                 </div>
                                 <div className="col-xl-4 d-flex align-items-stretch">

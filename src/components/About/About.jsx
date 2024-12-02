@@ -69,9 +69,12 @@ const About = () => {
                     <div className="col-lg-4">
                         <div className='section-title text-center'>
                             <h2 className='text-uppercase'>Our Doctors Acheivement</h2>
-                            <p className='form-text m-0'>Lorem ipsum dolor sit amet.</p>
+                            {/* <p className='form-text m-0'>Lorem ipsum dolor sit amet.</p> */}
                         </div>
-                        <p className='mt-3'>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Incidunt, quod laborum alias. Vitae dolorum, officia sit! Saepe ullam facere at, consequatur incidunt, quae esse, quis ut reprehenderit dignissimos, libero delectus.</p>
+                        <p className='mt-3'>Our doctors are the heart and soul of Organization, and their
+                         achievements reflect the highest standards of medical excellence and innovation.
+                          We are proud to share some of their remarkable accomplishments that showcase their dedication, expertise, and compassion.</p>
+                          <br/> Many of our doctors have been honored with prestigious national and international awards for their contributions to medical science, patient care, and research. These accolades reflect their unwavering commitment to pushing the boundaries of healthcare.
                     </div>
 
                     <div className="col-lg-8">
@@ -81,23 +84,34 @@ const About = () => {
                 </div>
             </div>
 
-            <div className="container" style={{ marginBottom: 100, marginTop: 100 }}>
+            {/* <div className="container" style={{ marginBottom: 100, marginTop: 100 }}>
                 <div className="row">
                     {content}
                 </div>
-            </div>
+            </div> */}
 
             <div className="container" style={{ marginBottom: 100, marginTop: 100 }}>
                 <div className="row align-items-center">
                     <div className="col-lg-4">
                         <div className='section-title text-center'>
                             <h2 className='text-uppercase'>Our Doctors Acheivement</h2>
-                            <p className='form-text m-0'>Lorem ipsum dolor sit amet.</p>
+                            {/* <p className='form-text m-0'>Lorem ipsum dolor sit amet.</p> */}
                         </div>
                     </div>
                     <div className="col-lg-8">
                         <div className="row">
-                            {
+                          <p> 
+Through pioneering treatments and advanced surgical techniques, 
+our doctors have provided life-saving and transformative care to
+ countless patients. Their expertise in adopting the latest medical technologies
+ ensures the best possible outcomes.
+<br/>
+Our doctors are at the forefront of medical research, publishing
+ groundbreaking studies in renowned journals and contributing to 
+ the advancement of global healthcare. Their research addresses 
+ some of the most pressing challenges in medicine, leading 
+                            to innovative solutions.</p>
+                            {/* {
                                 Array(6).fill(null).map((_, id) => (
                                     <div className="col-lg-4 col-md-6 col-sm-6" key={id + 3}>
                                         <div className="award-img">
@@ -105,7 +119,7 @@ const About = () => {
                                         </div>
                                     </div>
                                 ))
-                            }
+                            } */}
                         </div>
                     </div>
                 </div>
@@ -116,7 +130,7 @@ const About = () => {
                     <div className="col-lg-6">
                         <div className='mb-4 section-title text-center'>
                             <h2 className='text-uppercase'>Meet Our Specialist</h2>
-                            <p className='form-text m-0'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, ipsum!</p>
+                            {/* <p className='form-text m-0'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, ipsum!</p> */}
                         </div>
                     </div>
                 </div>
@@ -132,7 +146,7 @@ const About = () => {
                     <div className="col-lg-6 offset-lg-6">
                         <div className='mb-4 section-title text-center'>
                             <h2 className='text-uppercase'>What Doctor's Say</h2>
-                            <p className='form-text m-0'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, ipsum!</p>
+                            {/* <p className='form-text m-0'>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, ipsum!</p> */}
                         </div>
                     </div>
                 </div>

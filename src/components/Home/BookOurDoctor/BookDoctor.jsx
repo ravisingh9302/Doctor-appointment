@@ -102,8 +102,8 @@ const BookDoctor = () => {
 							<p className='m-0 text-secondary'>Lorem ipsum dolor sit.</p>
 						</div>
 						<div className="form-text">
-							<p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum.</p>
-							<p>Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover  Various versions have evolved over the years, sometimes</p>
+							<p>Our platform makes appointment booking quick and easy for both doctors and patients. With a user-friendly interface, doctors can manage their schedules effortlessly, reducing no-shows and ensuring that every patient gets timely care.</p>
+							{/* <p>Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover  Various versions have evolved over the years, sometimes</p> */}
 							<div className='text-center text-md-start my-3 my-md-0'>
 								<Link to={'/doctors'} className='more-btn text-center text-md-start'>See More</Link>
 							</div>

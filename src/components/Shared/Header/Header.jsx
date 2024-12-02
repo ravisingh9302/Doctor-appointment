@@ -8,6 +8,7 @@ import avatar from '../../../images/avatar.jpg';
 import { Button, message } from 'antd';
 import { loggedOut } from '../../../service/auth.service';
 import HeaderNav from './HeaderNav';
+import exampleImage from './image/8745a0daf9ea50c879323ddc5d95e213.jpg';
 
 const Header = () => {
     const navigate = useNavigate();
@@ -62,8 +63,9 @@ const Header = () => {
             <header id="header" className={`fixed-top ${!show && "stickyHeader"}`}>
                 <div className="container d-flex align-items-center">
 
-                    <Link to={'/'} className="logo me-auto">
-                        <img src={img} alt="" className="img-fluid" />
+                    <Link to={'/'} className=" logo me-auto">
+                        <img src={exampleImage}  alt="image" height={400} width={130} className="img-fluid" />
+                       
                     </Link>
                     <HeaderNav isLoggedIn={isLoggedIn} data={data}
                         avatar={avatar} content={content} open={open} setOpen={setOpen} />
